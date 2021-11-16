@@ -1,0 +1,117 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title> Instalacion de Docker </title><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta http-equiv="X-UA-Compatible" content="ie=edge"><link rel="shortcut icon" href="/favicon.a35c33cf.ico" type="image/x-icon"><link rel="stylesheet" href="/init.1321c284.css"><link rel="stylesheet" href="/article.df3435a8.css"></head><body> <header id="top-container" role="navigation"> </header> <main id="main-container"> <article id="article-container"> <h1 id="article-title"> Instalacion de Docker </h1> <h2 id="article-subtitle"> Instalacion de Docker con postgresSQL y Adminer </h2> <time id="article-date"> 2021.11.10 </time> <section id="article-content-container"> <details><summary>Table of Contents</summary>
+<p><div class="table-of-contents"><ul><li><a href="#enunciado-del-ejercicio">Enunciado del ejercicio</a></li><li><a href="#desarrollo-del-ejercicio">Desarrollo del ejercicio</a><ul><li><a href="#instalacion-de-docker">Instalacion de Docker</a><ul><li><a href="#instalacion-de-postgressql-y-de-adminer">Instalacion de PostgresSQL y de Adminer</a></li></ul></li><li><a href="#ejecucion-de-postgres-y-adminer">Ejecucion de Postgres y Adminer</a><ul><li><a href="#introduccion-de-datos-en-postgres">Introduccion de datos en postgres</a></li></ul></li></ul></li><li><a href="#despedida">Despedida</a></li></ul></div></p>
+</details>
+<h1 id="enunciado-del-ejercicio">Enunciado del ejercicio</h1>
+<p>Instalación y uso de <strong>Docker</strong> para desplegar una BD Relacional mediante el SGBD PostgreSQL usando contenedores.</p>
+<h1 id="desarrollo-del-ejercicio">Desarrollo del ejercicio</h1>
+<h2 id="instalacion-de-docker">Instalacion de Docker</h2>
+<p>Para la instalación de docker en el equipo, lo que vamos a realizar es ejecutar un <strong>script en bash</strong> que te va a ejecutar todas las instrucciones necesarias para su puesta en funcionamiento. El script seria el siguiente:</p>
+<pre class="hljs"><code># Install dependencies.
+  sudo apt install -y curl apt-transport-https \
+       software-properties-common ca-certificates
+  # Install docker.
+  curl -fsSL https:<span class="hljs-comment">//download.docker.com/linux/debian/gpg | sudo apt-key add -</span>
+  echo <span class="hljs-string">&quot;deb [arch=amd64] https://download.docker.com/linux/debian stretch stable  &quot;</span> | \
+    sudo tee /etc/apt/sources.list.d/docker-engine.list
+  
+  sudo apt-get update -y
+  sudo apt-get install -y docker-ce
+  
+  # Run docker.
+  sudo systemctl start docker
+  sudo systemctl enable docker
+  
+  # Add user to docker group <span class="hljs-keyword">for</span> using docker without sudo command.
+  sudo gpasswd -a <span class="hljs-string">&quot;${USER}&quot;</span> docker
+  
+  # Reboot
+  sudo reboot
+</code></pre>
+<p><sup class="footnote-ref"><a href="#fn1" id="fnref1">[1]</a></sup></p>
+<p>Una vez ejecutado este script <strong>(es para debian)</strong> ya tendriamos el docker instalado en nuestro equipo.</p>
+<p>Comprobamos con la siguiente orden que nuestro Docker esta instalado correctamente en el equipo.</p>
+<pre class="hljs"><code>docker --version
+</code></pre>
+<p>Y nos tiene que dar algo asi:</p>
+<p><img src="https://i.imgur.com/htffIVO.png" alt="imgur"><sup class="footnote-ref"><a href="#fn2" id="fnref2">[2]</a></sup></p>
+<h3 id="instalacion-de-postgressql-y-de-adminer">Instalacion de PostgresSQL y de Adminer</h3>
+<p>Ahora realizaremos una instalación, tanto de postgres como de adminer. Para ello lo que vamos a realizar son los siguientes comandos.</p>
+<pre class="hljs"><code>docker pull postgres
+
+docker pull adminer
+</code></pre>
+<p>La salida de estos comandos por pantallan seran algo parecida a esta:</p>
+<p><img src="https://i.imgur.com/ovdtPuS.png" alt="imgur"></p>
+<p><img src="https://i.imgur.com/60HIAKr.png" alt="imgur"><sup class="footnote-ref"><a href="#fn3" id="fnref3">[3]</a></sup></p>
+<p>Con esto, ya tendriamos instalados ambos contenedores en nuestro equipo.</p>
+<h4 id="montar-servicios-de-docker">Montar servicios de Docker</h4>
+<p>Una vez tenemos los contenedores instalados en nuestro equipo, vamos a arrancar estos servicios para poder trabajar con ellos.</p>
+<p>Para arrancar estos servicios tenemos que usar las siguientes ordenes:</p>
+<pre class="hljs"><code># Arrancar postgres
+    docker run --name contpost -e POSTGRES_USER=juan -e POSTGRES_PASSWORD=<span class="hljs-number">123</span> 
+    -e POSTGRES_DB=postgres -p <span class="hljs-number">5432</span>:<span class="hljs-number">5432</span> -d postgres
+    
+# Explicacion del comando 
+    docker run --name (NOMBRE DEL CONTENEDOR QUE LE QUEREMOS ASIGNAR)
+    -e POSTGRES_USER=(NOMBRE DEL USUARIO QUE VA A TENER PERMISOS)
+    -e POSTGRES_PASSWORD=(CONTRASEÑA DEL USUARIO)
+    -e POSTGRES_DB=(BASE DE DATOS QUE SE ASIGNARA)
+    -p (PUERTO QUE SE LE ASIGNARA)
+    -d (CONTENEDOR A MONTAR)
+    
+# Arrancar Adminer
+    docker run --name contadm -d --link contpost -p <span class="hljs-number">81</span>:<span class="hljs-number">8080</span> adminer
+
+# Explicacion del comando
+    docker run --name (NOMBRE DEL CONTADOR)
+    --link (CONTENEDOR VINCULADO)
+    -p (PUERTO ASIGNADO)
+    -d (CONTENEDOR A MONTAR)
+</code></pre>
+<p><sup class="footnote-ref"><a href="#fn4" id="fnref4">[4]</a></sup></p>
+<p>Esto no deberia de devolver una salida tal que como esta:</p>
+<h2 id="ejecucion-de-postgres-y-adminer">Ejecucion de Postgres y Adminer</h2>
+<p>Una vez hemos montado los servicios de Postgres y Adminer, vamos a ver si funcionan correctamente, para ello si nos vamos a localhost:81, deberiamos de ver nuestro gestor Adminer y podremos acceder a la base de datos de Postgres.</p>
+<p><img src="https://i.imgur.com/kyzeRft.png" alt="imgur"></p>
+<p>En la ventana, tendremos que rellenar los datos con nuestros datos que registramos en el comando de Montar el Postgres</p>
+<p><img src="https://i.imgur.com/sLvjOuN.png" alt="imgur"></p>
+<p>Una vez dentro realizado esto, ya podemos introducir datos en nuestra base de datos.</p>
+<h3 id="introduccion-de-datos-en-postgres">Introduccion de datos en postgres</h3>
+<p>Ahora lo que vamos a realizar es la introduccion de datos a traves de Adminer en nuestra base de datos, simplemente con la introduccion de datos en SQL de dentro de nuestra aplicacion ya tendriamos los datos en nuestra base de datos.</p>
+<pre class="hljs"><code>DROP TABLE IF EXISTS <span class="hljs-string">&quot;usuarios&quot;</span>;
+DROP SEQUENCE IF EXISTS usuarios_id_seq;
+CREATE SEQUENCE usuarios_id_seq INCREMENT <span class="hljs-number">1</span> MINVALUE <span class="hljs-number">1</span> MAXVALUE
+<span class="hljs-number">2147483647</span> CACHE <span class="hljs-number">1</span>;
+CREATE TABLE <span class="hljs-string">&quot;public&quot;</span>.<span class="hljs-string">&quot;usuarios&quot;</span> (
+<span class="hljs-string">&quot;id&quot;</span> integer DEFAULT nextval(<span class="hljs-symbol">&#x27;usuarios_id_seq</span>&#x27;) NOT NULL,
+<span class="hljs-string">&quot;nombre&quot;</span> character varying NOT NULL,
+<span class="hljs-string">&quot;contrasena&quot;</span> character varying NOT NULL,
+<span class="hljs-string">&quot;desc&quot;</span> character varying NOT NULL,
+CONSTRAINT <span class="hljs-string">&quot;usuarios_pkey&quot;</span> PRIMARY KEY (<span class="hljs-string">&quot;id&quot;</span>)
+) WITH (oids = <span class="hljs-literal">false</span>);
+
+</code></pre>
+<pre class="hljs"><code>INSERT INTO <span class="hljs-string">&quot;usuarios&quot;</span> (<span class="hljs-string">&quot;id&quot;</span>, <span class="hljs-string">&quot;nombre&quot;</span>, <span class="hljs-string">&quot;contrasena&quot;</span>, <span class="hljs-string">&quot;desc&quot;</span>)
+VALUES
+(<span class="hljs-number">1</span>, <span class="hljs-symbol">&#x27;admin</span>&#x27;, <span class="hljs-symbol">&#x27;passadmin</span>&#x27;, <span class="hljs-symbol">&#x27;Administrador</span>&#x27;),
+(<span class="hljs-number">2</span>, <span class="hljs-symbol">&#x27;usuario1</span>&#x27;, <span class="hljs-symbol">&#x27;password1</span>&#x27;, <span class="hljs-symbol">&#x27;Primer</span> usuario&#x27;),
+(<span class="hljs-number">3</span>, <span class="hljs-symbol">&#x27;usuario2</span>&#x27;, <span class="hljs-symbol">&#x27;password2</span>&#x27;, <span class="hljs-symbol">&#x27;Segundo</span> Usuario&#x27;),
+(<span class="hljs-number">4</span>, <span class="hljs-symbol">&#x27;leet</span>&#x27;, <span class="hljs-symbol">&#x27;P</span>@<span class="hljs-number">55</span>w0rd&#x27;, <span class="hljs-symbol">&#x27;El</span> Amigo Friky&#x27;);
+</code></pre>
+<h1 id="despedida">Despedida</h1>
+<p>Gracias a este ejercicio, hemos aprendido a instalar docker en nuestro equipo, a instalar paquetes con docker y a lanzar esos paquetes de docker y correrlos en nuestro equipo, en un futuro usaremos la base de datos que hemos generado con los datos que ya tenemos.</p>
+<p>Espero que os halla servido, un placer y hasta la proxima.</p>
+<hr class="footnotes-sep">
+<section class="footnotes">
+<ol class="footnotes-list">
+<li id="fn1" class="footnote-item"><p>Script en bash de instalacion de Docker. <a href="#fnref1" class="footnote-backref">↩︎</a></p>
+</li>
+<li id="fn2" class="footnote-item"><p>Comprobacion de la instalacion de Docker. <a href="#fnref2" class="footnote-backref">↩︎</a></p>
+</li>
+<li id="fn3" class="footnote-item"><p>Instalacion de postgres y Adminer. <a href="#fnref3" class="footnote-backref">↩︎</a></p>
+</li>
+<li id="fn4" class="footnote-item"><p>Montar contenedores en Docker. <a href="#fnref4" class="footnote-backref">↩︎</a></p>
+</li>
+</ol>
+</section> </section> <section id="article-navigation"> <div class="article-navigation-item article-navigation-next"> <a href="/article/3.html"> <div class="article-navigation-arrow article-navigation-next">＜</div> <div class="article-navigation-content article-navigation-next"> <p class="article-navigation-title">Peritaje Forense</p> <p class="article-navigation-subtitle">Instalacion de Docker con postgresSQL y Adminer</p> </div> </a> </div> <div class="article-navigation-item article-navigation-prev"> <a href="/article/0.html"> <div class="article-navigation-arrow article-navigation-prev">＞</div> <div class="article-navigation-content article-navigation-prev"> <p class="article-navigation-title">Captura la bandera 1</p> <p class="article-navigation-subtitle">Introduccion a los captura la bandera</p> </div> </a> </div> </section> <section id="article-list-button-container"> <a href="/articles.html"> <div id="article-list-button">📚</div> </a> </section> </article> </main> <script defer src="/init.ddb7c0df.js"></script>
+</body></html>

@@ -1,0 +1,269 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title> Captura la bandera 1 </title><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta http-equiv="X-UA-Compatible" content="ie=edge"><link rel="shortcut icon" href="/favicon.a35c33cf.ico" type="image/x-icon"><link rel="stylesheet" href="/init.1321c284.css"><link rel="stylesheet" href="/article.df3435a8.css"></head><body> <header id="top-container" role="navigation"> </header> <main id="main-container"> <article id="article-container"> <h1 id="article-title"> Captura la bandera 1 </h1> <h2 id="article-subtitle"> Introduccion a los captura la bandera </h2> <time id="article-date"> 2021.11.10 </time> <section id="article-content-container"> <details><summary>Table of Contents</summary>
+<p><div class="table-of-contents"><ul><li><a href="#explicacion-del-ejercicio">Explicacion del ejercicio</a><ul><li><a href="#desarrollo-del-ejercicio">Desarrollo del ejercicio</a></li></ul></li><li><a href="#reto-1%3A-el-quijote">Reto 1: El Quijote</a><ul><li><a href="#enunciado-del-problema">Enunciado del problema</a><ul><li><a href="#resolucion-reto-1">Resolucion reto 1</a></li></ul></li></ul></li><li><a href="#reto-2%3A-julio-cesar">Reto 2: Julio Cesar</a><ul><li><a href="#descripcion-del-problema-2">Descripcion del problema 2</a><ul><li><a href="#resolucion-ejercicio-2">Resolucion ejercicio 2</a></li></ul></li></ul></li><li><a href="#reto-3%3A-el-codificador">Reto 3: El Codificador</a><ul><li><a href="#enunciado-del-ejercicio-3">Enunciado del ejercicio 3</a><ul><li><a href="#resolucion-del-ejercicio-3">Resolucion del ejercicio 3</a></li></ul></li></ul></li><li><a href="#reto-4%3A-mensaje-enigmatico">Reto 4: Mensaje Enigmatico</a><ul><li><a href="#enunciado-del-ejercicio-4">Enunciado del ejercicio 4</a><ul><li><a href="#resolucion-del-ejercicio-4">Resolucion del ejercicio 4</a></li></ul></li></ul></li><li><a href="#reto-5%3A-archivo-wireshark">Reto 5: Archivo Wireshark</a><ul><li><a href="#enunciado-del-ejercicio-5">Enunciado del ejercicio 5</a><ul><li><a href="#resolucion-del-ejercicio-5">Resolucion del ejercicio 5</a></li></ul></li></ul></li><li><a href="#despedida">Despedida</a></li></ul></div></p>
+</details>
+<p>Como introduccion al Hacking Etico, lo primero que vamos a realizar es un ejercicio de <strong>Captura la Bandera</strong>, esto lo vamos a realizar de la siguiente manera:</p>
+<h1 id="explicacion-del-ejercicio">Explicacion del ejercicio</h1>
+<p>En Hacking Ético son muy comunes los retos llamados <strong>CTF</strong> (<strong>C</strong>apture <strong>T</strong>he <strong>F</strong>lag) o capturar la bandera. Normalmente consiste en una máquina que prepara alguien, para que la comunidad trate de hackearla. Intentaremos hacer muchas, sobre todo en la recta final de curso, para consolidar todo lo aprendido.
+Básicamente, tienes que acceder a la máquina, y encontrar lo que se llama <strong>flag</strong> o <strong>bandera</strong>. Es un fichero de texto con una palabra (normalmente un galimatías, un uuid, …), que pruebe que has accedido con éxito.
+Vamos a hacer una pequeña serie de retos CTF no muy complicados, para que más o menos puedas hacerte una idea de cómo son.</p>
+<h2 id="desarrollo-del-ejercicio">Desarrollo del ejercicio</h2>
+<p>Para empezar, nos descargaremos <a href="https://mega.nz/file/eV4TwCyB#ZrLjdqlcpnGw9h3yd50hqvEv_2u3qtf2HjRuGrSb0-k"><strong>este enlace</strong></a> <sup class="footnote-ref"><a href="#fn1" id="fnref1">[1]</a></sup>de Mega para tener los archivos.(No he podido subirlos a GitHub).
+Empezando por el reto01, <code>descomprimimos el archivo y nos dara 2 archivos</code>, un libro y la explicacion de lo que tenemos que ir realizando para encontrar la clave del siguiente archivo, si no encontramos la clave del reto anterior, no podemos seguir avanzando en el ejercicio. Asi iremos completando todos los retos poco a poco.</p>
+<h1 id="reto-1%3A-el-quijote">Reto 1: El Quijote</h1>
+<h2 id="enunciado-del-problema">Enunciado del problema</h2>
+<p>Desde la creación del instituto, algunos alumnos se han encargado de la gestión del periodido local, <code>&quot;El noticiero&quot;</code>, donde se intercambian mensajes y escriben artículos didácticos. En uno de los artículos alguien anónim@ ha lanzado un reto. Asegura haber escondido un mensaje en el libro más universal de la literatura castellana. En su mensaje advierte que para empezar, nos proporciona algunas coordenadas para que las mentes mas brillantes del instituto puedan resolverlo.</p>
+<table>
+<thead>
+<tr>
+<th><code>Libro: &quot;El quijote de la mancha&quot;</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>10:8:2</td>
+</tr>
+<tr>
+<td>23:11:1</td>
+</tr>
+<tr>
+<td>30:8:2</td>
+</tr>
+<tr>
+<td>30:26:7</td>
+</tr>
+<tr>
+<td>35:1:7</td>
+</tr>
+<tr>
+<td>151:19:10</td>
+</tr>
+<tr>
+<td>151:11:8</td>
+</tr>
+<tr>
+<td>152:11:5</td>
+</tr>
+</tbody>
+</table>
+<h3 id="resolucion-reto-1">Resolucion reto 1</h3>
+<blockquote>
+<p>Al observar el resultado que nos dan, podemos comprobar que parece como que nos facilitan unas coordenadas, probamos a ver si las coordenadas se corresponde con lo siguiente:</p>
+</blockquote>
+<p><code>Pagina del libro</code> : <code>Numero de la linea</code> : <code>Palabra en la linea</code></p>
+<p>Con lo cual si nos fueramos a la linea numero 10, fila numero 8, segunda palabrar obtendriamos la palabra <strong>querer</strong>.
+Esto lo tendremos que realizar con cada una de las lineas para obtener el siguiente resultado:</p>
+<table>
+<thead>
+<tr>
+<th><code>Coordenada</code> --&gt; <strong>Clave</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>10:8:2</code> = <strong>querer</strong></td>
+</tr>
+<tr>
+<td><code>23:11:1</code> = <strong>saber</strong></td>
+</tr>
+<tr>
+<td><code>30:8:2</code> = <strong>noticia</strong></td>
+</tr>
+<tr>
+<td><code>30:26:7</code> = <strong>sobre</strong></td>
+</tr>
+<tr>
+<td><code>35:1:7</code> = <strong>conocer</strong></td>
+</tr>
+<tr>
+<td><code>151:19:10</code> =<strong>misterio</strong></td>
+</tr>
+<tr>
+<td><code>151:11:8</code> = <strong>quien</strong></td>
+</tr>
+<tr>
+<td><code>152:11:5</code> = <strong>hizo</strong></td>
+</tr>
+</tbody>
+</table>
+<p>Una vez ya hemos encontrado las palabras solo queda estructurarlas entre unos <code>corchetes</code> comenzando con <code>flag</code> y los espacios cambiarlos por <code>_</code></p>
+<pre class="hljs"><code>flag{querer_saber_noticia_sobre_conocer_misterio_quien_hizo}
+</code></pre>
+<h1 id="reto-2%3A-julio-cesar">Reto 2: Julio Cesar</h1>
+<h2 id="descripcion-del-problema-2">Descripcion del problema 2</h2>
+<blockquote>
+<p><strong>Después de muchos años recopilando documentación</strong>, fotos y artículos, se ha decidido realizar una limpieza y llevar la documentación antigua a una nueva sala que le ha cedido el instituto.
+En esta sala se pueden archivar de una forma sencilla por fecha todos los documentos del periodico.</p>
+</blockquote>
+<p>Durante este proceso moviendo documentos, una hoja extraña se cae entre los documentos que lleváis. Contiene un texto ilegible junto a la <strong>referencia del emperador Julio César</strong>. ¿Podrás sacar en claro que quería decir la nota?</p>
+<pre class="hljs"><code>Yn fvthvragr vasbeznpvba rf pbasvqrapvny. Gr nlhqnen n cebfrthve ra yn 
+vairfgvtnpvba. Ab gr pbasvrf, ab gbqnf ynf vasbeznpvbarf qr ynf dhr qvfcbarzbf
+fba gna snpvyrf pbzb rfgn ebgnpvba qr pnenpgrerf. Sveznqb: ha nzvtb.  
+synt{rfgnzbf_rzcrmnaqb_n_pbabpre_nytb_qr_uvfgbevn}
+</code></pre>
+<h3 id="resolucion-ejercicio-2">Resolucion ejercicio 2</h3>
+<blockquote>
+<p>Despues de ver el mensaje y saber que es del mismisimo Cesar, todo el mundo sabe que Cesar invento un sistema de cifrado que se encargaba de cambiar su colocacion en el abecedario de tal manera que una <strong>“A”</strong> en un mensaje cifrado con este sistema con una clave <strong>1</strong>, en el mensaje apareceria como una <strong>“B”</strong>.</p>
+</blockquote>
+<p><a href="http://nosolomates.es/?page_id=760"><strong>Aqui</strong></a> <sup class="footnote-ref"><a href="#fn2" id="fnref2">[2]</a></sup>Probando un poquito con un alternador, hemos descubierto que la clave de este mensaje es <strong>13</strong>, osea que tendriamos que mover la letra <strong>13 veces</strong>.</p>
+<pre class="hljs"><code>la siguiente informacion es confidencial. te ayudara a proseguir en la 
+investigacion. no te confies,no todas las informaciones de las que 
+disponemos son tan faciles como esta rotacion de caracteres.
+firmado: un amigo.  
+
+flag{estamos_empezando_a_conocer_algo_de_historia}
+
+N=<span class="hljs-number">13</span>
+</code></pre>
+<h1 id="reto-3%3A-el-codificador">Reto 3: El Codificador</h1>
+<h2 id="enunciado-del-ejercicio-3">Enunciado del ejercicio 3</h2>
+<blockquote>
+<p>Al darle la vuelta a la hoja, veis que tambien tiene otro texto escrito en esa parte, aunque tampoco lo entendéis.</p>
+</blockquote>
+<p>Se adjunta también un fichero con extensión <strong>pyc</strong>. ¿Nos servirá de ayuda?</p>
+<p>¿Podrás proporionarnos la otra información que está en la otra cara de la hoja?
+Datos proporcionados (generado con xor.pyc):</p>
+<pre class="hljs"><code>**Ax8VCB4HEAAGDDMEBRERPhENAh8DLQQcEQERMAgaBjERAhwEGgADHA==**
+</code></pre>
+<h3 id="resolucion-del-ejercicio-3">Resolucion del ejercicio 3</h3>
+<p>Lo primero que podemos observar es que nos han facilitado un archivo pyc.
+Este archivo es un archivo python compilado, asi que vamos a buscar un
+descompilador online de este tipo de archivos<a href="https://www.toolnb.com/tools-lang-en/pyc.html"><strong>descompilador pyc</strong></a> <sup class="footnote-ref"><a href="#fn3" id="fnref3">[3]</a></sup>. Una vez descompilado este archivo
+obtenemos esto:</p>
+<pre class="hljs"><code># uncompyle6 version <span class="hljs-number">3.5</span>.<span class="hljs-number">0</span>
+# Python bytecode <span class="hljs-number">2.7</span> (<span class="hljs-number">62211</span>)
+# Decompiled from: Python <span class="hljs-number">2.7</span>.<span class="hljs-number">5</span> (default, Nov <span class="hljs-number">16</span> <span class="hljs-number">2020</span>, <span class="hljs-number">22</span>:<span class="hljs-number">23</span>:<span class="hljs-number">17</span>) 
+# [GCC <span class="hljs-number">4.8</span>.<span class="hljs-number">5</span> <span class="hljs-number">20150623</span> (Red Hat <span class="hljs-number">4.8</span>.<span class="hljs-number">5</span>-<span class="hljs-number">44</span>)]
+# Embedded file name: xor.py
+# Compiled at: <span class="hljs-number">2021</span>-<span class="hljs-number">02</span>-<span class="hljs-number">01</span> <span class="hljs-number">23</span>:<span class="hljs-number">35</span>:<span class="hljs-number">44</span>
+import binascii, itertools, base64, sys
+
+def xor_crypt_string(data, key=<span class="hljs-symbol">&#x27;estoesunaclaveparacifrar</span>&#x27;, encode=False, decode=False):
+    from itertools import izip, cycle
+    import base64
+    <span class="hljs-keyword">if</span> decode:
+        data = base64.decodestring(data)
+    xored = (&#x27;&#x27;).join(chr(ord(x) ^ ord(y)) <span class="hljs-keyword">for</span> x, y <span class="hljs-keyword">in</span> izip(data, cycle(key)))
+    <span class="hljs-keyword">if</span> encode:
+        <span class="hljs-keyword">return</span> base64.encodestring(xored).strip()
+    <span class="hljs-keyword">return</span> xored
+
+
+secret_data = sys.argv[<span class="hljs-number">1</span>]
+print <span class="hljs-symbol">&#x27;Cifrado</span>&#x27;
+print xor_crypt_string(secret_data, encode=True)
+print <span class="hljs-symbol">&#x27;Descifrado</span>&#x27;
+print xor_crypt_string(xor_crypt_string(secret_data, encode=True), decode=True)
+</code></pre>
+<p>Podemos observar que este archivo python 2.7 lo que nos esta haciendo es una funcion de encriptacion y una funcion de desencriptacion.
+Parece que la clave que nos han facilitado esta cifrada con un algoritmo xor. Si modificamos este codigo y lo dejamos de la siguiente manera podemos obtener la clave descifrada.</p>
+<pre class="hljs"><code>def xor_crypt_string(data, key=<span class="hljs-symbol">&#x27;estoesunaclaveparacifrar</span>&#x27;, encode=False, decode=False):
+    from itertools import izip, cycle
+    import base64
+    <span class="hljs-keyword">if</span> decode:
+        data = base64.decodestring(data)
+    xored = (&#x27;&#x27;).join(chr(ord(x) ^ ord(y)) <span class="hljs-keyword">for</span> x, y <span class="hljs-keyword">in</span> izip(data, cycle(key)))
+    <span class="hljs-keyword">if</span> encode:
+        <span class="hljs-keyword">return</span> base64.encodestring(xored).strip()
+    <span class="hljs-keyword">return</span> xored
+
+secret_data = **Ax8VCB4HEAAGDDMEBRERPhENAh8DLQQcEQERMAgaBjERAhwEGgADHA==**
+print xor_crypt_string(xor_crypt_string(secret_data, encode=True), decode=True)
+</code></pre>
+<p>Con este pequeño fragmento de codigo podriamos obtener la clave.</p>
+<pre class="hljs"><code>flag{tengo_esta_clave_entre_mis_papeles}
+</code></pre>
+<h1 id="reto-4%3A-mensaje-enigmatico">Reto 4: Mensaje Enigmatico</h1>
+<h2 id="enunciado-del-ejercicio-4">Enunciado del ejercicio 4</h2>
+<blockquote>
+<p>Con la información que habeis obtenido, intentais utilizar las credenciales para poder acceder al ordenador del periodico y al entrar os descargais un archivo.</p>
+</blockquote>
+<p>El fichero original ha cifrado alguna información secreta que debes obtener para que la investigación no se atasque.
+Esto es lo que sabemos que ha devuelto la salida del fichero que has obtenido al entrar en la web del periódico.</p>
+<p><strong>Hemos recibido este mensaje junto a unas instrucciones para su manejo. Parece un completo enigma.</strong></p>
+<pre class="hljs"><code><span class="hljs-number">59556843656</span>d517a545764684d3035355a4735425a317074526e526a626d646e57544a61633249794e476461534842785a55644e5a316b7a566a42615630316e596c684f4d5751795a32646156315a6f5a4668765a325674536e4e684d6e4e6e576d3543626d4e595157645a57454a74576a4a6e5a32517962486c684d30316e596c6857613246755a32645a5748426f597a4e725a316c59516d356957456c6e59556477626c6c745557646c57484278595663775a324e496144466b6257396e5a56646f64574a745a326469563342785930646a5a32466e5054303d
+</code></pre>
+<table>
+<thead>
+<tr>
+<th><code>Modelo: M3 Reflector: ????&quot;</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ROT1.: 1 --&gt; POS1.: A --&gt; ANILLO1.: A</td>
+</tr>
+<tr>
+<td>ROT2.: 2 --&gt; POS1.: B --&gt; ANILLO1.: B</td>
+</tr>
+<tr>
+<td>ROT3.: 3 --&gt; POS1.: C --&gt; ANILLO1.: C</td>
+</tr>
+</tbody>
+</table>
+<p>PLUGBOARD: bq cr di ej kw mt os px uz gh</p>
+<h3 id="resolucion-del-ejercicio-4">Resolucion del ejercicio 4</h3>
+<p>El mensaje parece que esta cifrado de alguna manera, y mirando el codigo parece que esta en hexadecimal, pues no hay ninguna letra mas halla de la F. Primero vamos a pasar este mensaje.</p>
+<p>Utilizando <a href="https://gchq.github.io/CyberChef/"><strong>esta utilidad</strong></a> <sup class="footnote-ref"><a href="#fn4" id="fnref4">[4]</a></sup>ciberchef, hemos podido pasar de un sistema a otro.</p>
+<pre class="hljs"><code>YUhCemQzTWdhM055ZG5BZ1ptRnRjbmdnWTJac2IyNGdaSHBxZUdNZ1kzVjBaV01nYlhOMWQyZ2daV1ZoZFhvZ2VtSnNhMnNnWm5CbmNYQWdZWEJtWjJnZ2QybHlhM01nYlhWa2FuZ2dZWHBoYzNrZ1lYQm5iWElnYUdwblltUWdlWHBxYVcwZ2NIaDFkbW9nZVdodWJtZ2diV3BxY0djZ2FnPT0=
+</code></pre>
+<p>Este segundo mensaje tiene pinta de que ahora esta cifrado en Base64 asi que vamos a descifrarlo tambien.</p>
+<pre class="hljs"><code>aHBzd3Mga3NydnAgZmFtcnggY2Zsb24gZHpqeGMgY3V0ZWMgbXN1d2ggZWVhdXogemJsa2sgZnBncXAgYXBmZ2ggd2lya3MgbXVkanggYXphc3kgYXBnbXIgaGpnYmQgeXpqaW0gcHh1dmogeWhubmggbWpqcGcgag==
+</code></pre>
+<p>Y este parece que tambien esta cifrado en Base64, si nos equivocamos, pensaremos otra cosa.</p>
+<pre class="hljs"><code>hpsws ksrvp famrx cflon dzjxc cutec msuwh eeauz zblkk fpgqp apfgh wirks mudjx azasy apgmr hjgbd yzjim pxuvj yhnnh mjjpg j
+</code></pre>
+<p>Ahora parece que tenemos algo que si encaja con una descripcion de enigma. Vamos a irnos a un descifrador de enigma y pasemosle los parametros que nos ha facilitado el enunciado.</p>
+<pre class="hljs"><code>ponga atenc ionsi fraca samos enest amisi onnos verem osabo cados aperd erlot odoan otees taban derae nigma mtres ukwbv i
+</code></pre>
+<p>Con esto ya tenemos un mensaje legible, solo nos queda obviar los espacios y nos queda este mensaje tan bonito:</p>
+<blockquote>
+<p>Ponga atencion si fracasamos en esta mision nos veremos abocados a perderlo todo anote esta bandera enigmamtresukwbvi</p>
+</blockquote>
+<p>Con esto, podemos decir que la clave es:</p>
+<pre class="hljs"><code>flag{enigmamtresukwbvi}
+</code></pre>
+<h1 id="reto-5%3A-archivo-wireshark">Reto 5: Archivo Wireshark</h1>
+<h2 id="enunciado-del-ejercicio-5">Enunciado del ejercicio 5</h2>
+<blockquote>
+<p>Hablais con el director del instituto y os permite acceder al contenido del disco. Al entrar encontrais un pcap. ! Qué es un pcap ! os preguntáis. No lo sabemos pero habrá que investigar.</p>
+</blockquote>
+<p>Los datos os suenan codificados en hexadecimal pero … ¿Cómo recomponer estas piezas de cada petición? Además,hay mucho ruido de navegación en el fichero.</p>
+<p><code>Se proporciona un archivo wireshark para verlo</code></p>
+<h3 id="resolucion-del-ejercicio-5">Resolucion del ejercicio 5</h3>
+<blockquote>
+<p>En este ejercicio se nos pide que descubramos la ultima bandera. Para hacer esto abrimos el archivo facilitado con WireShark.
+Este archivo contiene muchisimas tramas de red. Nos paramos a ver las todas las tramas y al final del documento me fijo en algo muy extraño, ¿Que es localghost? y ¿que es esa trama hexadecimal que tiene delante?</p>
+</blockquote>
+<p>Vamos copiando poco a poco y metiendo en el descriptor poco a poco todas las tramas.</p>
+<pre class="hljs"><code><span class="hljs-number">45737465206669636865726</span>f206573206d757920696d706f7274616e7465
+<span class="hljs-number">2e20446573747275697220756</span>e612076657a206c6569646f2e204e6f2074
+<span class="hljs-number">69656e652073656</span>e7469646f20717565206f74726f73206f6a6f73207175
+<span class="hljs-number">65206e6</span>f207365616e206c6f73207475796f73206c6f207665616e2e200a
+<span class="hljs-number">4</span>c65616e202c207665616e20c2bf517565206d61732064613f0a0a666c61
+
+<span class="hljs-number">677</span>b646e735f7370795f657866696c74726174696f6e7d200a0a
+</code></pre>
+<p>Estas serian todas las tramas separadas con lo que una vez traducidas, el mensaje quedaria tal que asi:</p>
+<pre class="hljs"><code>Este fichero es muy importante. Destruir una vez leido.
+No tiene sentido que otros ojos que no sean los tuyos lo vean. 
+Lean , vean ¿Que mas da?
+
+flag{dns_spy_exfiltration}
+</code></pre>
+<h1 id="despedida">Despedida</h1>
+<p>Con esto terminamos los 5 retos de CTF que queriamos hacer hoy, algunos han sido bastante enrrevesados pero han sido entretenidos.
+Un saludo y hasta la proxima.</p>
+<hr class="footnotes-sep">
+<section class="footnotes">
+<ol class="footnotes-list">
+<li id="fn1" class="footnote-item"><p>Enlace de descarga del ejercicio. <a href="#fnref1" class="footnote-backref">↩︎</a></p>
+</li>
+<li id="fn2" class="footnote-item"><p>Descifrador Julio Cesar. <a href="#fnref2" class="footnote-backref">↩︎</a></p>
+</li>
+<li id="fn3" class="footnote-item"><p>Descompilador de Pyc Online. <a href="#fnref3" class="footnote-backref">↩︎</a></p>
+</li>
+<li id="fn4" class="footnote-item"><p>Utilidad CyberChef <a href="#fnref4" class="footnote-backref">↩︎</a></p>
+</li>
+</ol>
+</section> </section> <section id="article-navigation"> <div class="article-navigation-item article-navigation-next"> <a href="/article/2.html"> <div class="article-navigation-arrow article-navigation-next">＜</div> <div class="article-navigation-content article-navigation-next"> <p class="article-navigation-title">Instalacion de Docker</p> <p class="article-navigation-subtitle">Instalacion de Docker con postgresSQL y Adminer</p> </div> </a> </div> </section> <section id="article-list-button-container"> <a href="/articles.html"> <div id="article-list-button">📚</div> </a> </section> </article> </main> <script defer src="/init.ddb7c0df.js"></script>
+</body></html>

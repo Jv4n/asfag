@@ -1,0 +1,54 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title> Peritaje Forense </title><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta http-equiv="X-UA-Compatible" content="ie=edge"><link rel="shortcut icon" href="/favicon.a35c33cf.ico" type="image/x-icon"><link rel="stylesheet" href="/init.1321c284.css"><link rel="stylesheet" href="/article.df3435a8.css"></head><body> <header id="top-container" role="navigation"> </header> <main id="main-container"> <article id="article-container"> <h1 id="article-title"> Peritaje Forense </h1> <h2 id="article-subtitle"> Instalacion de Docker con postgresSQL y Adminer </h2> <time id="article-date"> 2021.11.16 </time> <section id="article-content-container"> <details><summary>Table of Contents</summary>
+<p><div class="table-of-contents"><ul><li><a href="#enunciado-del-ejercicio">Enunciado del ejercicio</a></li><li><a href="#desarrollo-del-ejercicio">Desarrollo del ejercicio</a><ul><li><a href="#instalacion-de-raspberrypi">Instalacion de RaspberryPi</a></li><li><a href="#configuracion-del-nuevo-disco-duro">Configuracion del nuevo Disco Duro</a></li><li><a href="#montar-la-carpeta-en-el-disco-duro">Montar la carpeta en el Disco duro</a></li><li><a href="#montar-el-supuesto">Montar el supuesto</a></li><li><a href="#cifrado-del-archivo">Cifrado del archivo</a></li></ul></li><li><a href="#despedida">Despedida</a></li></ul></div></p>
+</details>
+<h1 id="enunciado-del-ejercicio">Enunciado del ejercicio</h1>
+<p>Extraer, documentar y firmar mediante los tipos de funciones hash md5 y sha256, una posible <strong>evidencia digital</strong> relativa a los mensajes de diagnostico del kernel, dentro de un <strong>peritaje forense básico</strong> sobre un escenario de un SO Linux Debian 10.</p>
+<h1 id="desarrollo-del-ejercicio">Desarrollo del ejercicio</h1>
+<h2 id="instalacion-de-raspberrypi">Instalacion de RaspberryPi</h2>
+<p>Vamos a instalar una imagen de RaspberryPi como maquina para peritar, vamos a usar esta maquina virtual debido a que tiene muy pocos requerimientos minimos sobre el sistema anfitrion.</p>
+<p>El proceso de instalacion de esta maquina es muy sencillo, lo unico que necesitamos es descargarnos <a href="https://downloads.raspberrypi.org/rpd_x86/images/rpd_x86-2021-01-12/2021-01-11-raspios-buster-i386.iso"><strong>esta imagen</strong></a> <sup class="footnote-ref"><a href="#fn1" id="fnref1">[1]</a></sup> para montarla en nuestra maquina virtual e instalar esta maquina, tambien hemos decidido actualizar todos sus componentes a la ultima version.</p>
+<p>Una vez instalada y actualizada, como ultimo paso, tendremos que crear un DISCO DURO de 1GB e introducirselo como si de un disco duro adicional se tratara en la maquina.</p>
+<p>Deberia de quedar de la siguiente manera:</p>
+<p><img src="https://i.imgur.com/YRGDtjv.png" alt="imgur"><sup class="footnote-ref"><a href="#fn2" id="fnref2">[2]</a></sup></p>
+<h2 id="configuracion-del-nuevo-disco-duro">Configuracion del nuevo Disco Duro</h2>
+<p>Ahora lo que vamos a hacer es formatear ese disco duro para que tenga un formato.</p>
+<p>Iniciamos la maquina con el disco duro nuevo y comprobamos que se ha conectado correctamente.</p>
+<pre class="hljs"><code>sudo fdisk -l
+</code></pre>
+<p><img src="https://i.imgur.com/tyZwZLI.png" alt="imgur"></p>
+<p><img src="https://i.imgur.com/uAKFdz9.png" alt="imgur"></p>
+<p><img src="https://i.imgur.com/DlR5Hay.png" alt="imgur"></p>
+<p>Para aplicar el Sistema de archivos al disco duro tenemos que ejecutar la siguiente orden:</p>
+<pre class="hljs"><code>sudo mkfs.vfat -F 32 /dev/sdb1
+</code></pre>
+<p>Con esto, ya tendriamos la tabla de particiones asignada en la unidad nueva.</p>
+<h2 id="montar-la-carpeta-en-el-disco-duro">Montar la carpeta en el Disco duro</h2>
+<p>Para continuar vamos a montar una carpeta en el disco duro para trabajar con ella, vamos a la carpeta /tmp y en esta carpeta vamos a crear evidencias.</p>
+<pre class="hljs"><code>cd /tmp
+mkdir evidencias
+cd evidencias
+sudo mount /dev/sdb1 evidencias/
+</code></pre>
+<h2 id="montar-el-supuesto">Montar el supuesto</h2>
+<p>Dentro de la carpeta de evidencias, vamos a crear una carpeta llamada escenarioLinux, y vamos a introducir un archivo dmesg en el como salida.</p>
+<p><img src="https://i.imgur.com/VNiEaQq.png" alt="imgur"></p>
+<h2 id="cifrado-del-archivo">Cifrado del archivo</h2>
+<p>Una vez extraido los datos, vamos a cifrar el documento con un <strong>HASH MD5</strong> y con un <strong>HASH SHA256</strong></p>
+<pre class="hljs"><code>md5sum tarea2AFI.dmesg.txt &gt;&gt; tarea2AFI.dmesg.txt
+sha256 tarea2AFI.dmesg.txt &gt;&gt; tarea2AFI.dmesg.txt
+</code></pre>
+<p><img src="https://i.imgur.com/0fOj30I.png" alt="imgur"></p>
+<p>Con esto ya habriamos extraido el archivo de carga del sistema y los hemos guardado con una clave MD5 y SHA256.</p>
+<h1 id="despedida">Despedida</h1>
+<p>Gracias a este ejercicio, hemos aprendido a extraer los datos del sistema guardados en volatil y ademas hemos dejado la firma en 2 formatos.</p>
+<p>Espero que os halla servido, un placer y hasta la proxima.</p>
+<hr class="footnotes-sep">
+<section class="footnotes">
+<ol class="footnotes-list">
+<li id="fn1" class="footnote-item"><p>Imagen de descarga de Raspberry. <a href="#fnref1" class="footnote-backref">↩︎</a></p>
+</li>
+<li id="fn2" class="footnote-item"><p>Estado de la maquina RaspberryPi. <a href="#fnref2" class="footnote-backref">↩︎</a></p>
+</li>
+</ol>
+</section> </section> <section id="article-navigation"> <div class="article-navigation-item article-navigation-next"> <a href="/article/1.html"> <div class="article-navigation-arrow article-navigation-next">＜</div> <div class="article-navigation-content article-navigation-next"> <p class="article-navigation-title">Cifrado con MD5 y SHA</p> <p class="article-navigation-subtitle">Como cifrar con MD5 y SHA</p> </div> </a> </div> <div class="article-navigation-item article-navigation-prev"> <a href="/article/2.html"> <div class="article-navigation-arrow article-navigation-prev">＞</div> <div class="article-navigation-content article-navigation-prev"> <p class="article-navigation-title">Instalacion de Docker</p> <p class="article-navigation-subtitle">Instalacion de Docker con postgresSQL y Adminer</p> </div> </a> </div> </section> <section id="article-list-button-container"> <a href="/articles.html"> <div id="article-list-button">📚</div> </a> </section> </article> </main> <script defer src="/init.ddb7c0df.js"></script>
+</body></html>
